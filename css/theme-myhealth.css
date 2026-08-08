@@ -1,7 +1,7 @@
 /* myHealth Experience Portal — theme layer over family/polara-core.css */
 @theme {
-  --color-accent:        #1b365d; /* polara-deepblue · 12.1:1 */
-  --color-accent-hover:  #004a7a; /* blue one step down · 9.3:1 */
-  --color-accent-subtle: #eef3f8;
-  --color-ring:          #005b96; /* polara-blue · 7.2:1 non-text */
+  --color-polara-accent:        #1b365d; /* polara-deepblue · 12.1:1 */
+  --color-polara-accent-hover:  #004a7a; /* blue one step down · 9.3:1 */
+  --color-polara-accent-subtle: #eef3f8;
+  --color-polara-ring:          #005b96; /* polara-blue · 7.2:1 non-text */
 }

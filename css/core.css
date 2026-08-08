@@ -42,14 +42,22 @@
 /* ---- THEME SLOTS ----------------------------------------------------------
  * Each app's theme file must define exactly these, nothing more:
  *
- *   --color-accent          primary action fill      (≥ 4.5:1 with white text)
- *   --color-accent-hover    one oklch lightness step DOWN from accent
- *   --color-accent-subtle   accent at ~6% over white (emphasis panels)
- *   --color-ring            focus ring               (≥ 3:1 on white)
+ *   --color-polara-accent          primary action fill (≥ 4.5:1 with white text)
+ *   --color-polara-accent-hover    one oklch lightness step DOWN from accent
+ *   --color-polara-accent-subtle   accent at ~6% over white (emphasis panels)
+ *   --color-polara-ring            focus ring          (≥ 3:1 on white)
  *
  * Components reference the slot, never a hue:
- *   primary button   bg-(--color-accent) hover:bg-(--color-accent-hover)
- *   focus            ring-(--color-ring)
+ *   primary button   bg-polara-accent hover:bg-polara-accent-hover
+ *   focus            ring-polara-ring
+ *
+ * The `polara-` prefix is load-bearing, not decoration. The unprefixed names
+ * these replaced (--color-accent / --color-ring) are exactly what shadcn/ui's
+ * standard `@theme inline` block maps, and CSS gives the win to whichever is
+ * declared LAST. A consumer importing this package above its shadcn block
+ * silently lost both slots — in the myHealth portal that rendered primary
+ * buttons white-on-near-white. Keeping every slot inside the `polara-`
+ * namespace makes the collision impossible rather than merely documented.
  * ------------------------------------------------------------------------ */
 
 @layer base {
