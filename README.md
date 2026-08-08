@@ -109,9 +109,23 @@ Known call sites at the time of the rename:
   each carry `--color-primary: var(--color-accent);`, which must become
   `var(--color-polara-accent)`. vitalSign is pinned to `#v1.0.0`, so it keeps
   building until someone bumps it deliberately.
-- **directHealthPortal** — no direct references; it consumes the slots only
-  through `buttonVariants`. Its `index.css` carries a workaround comment about
-  the collision that can be deleted on upgrade.
+- **directHealthPortal** — eight call sites in `packages/client/src` use the
+  arbitrary-property form directly: `bg-(--color-accent)`,
+  `hover:bg-(--color-accent-hover)` (×4), `focus:bg-(--color-accent-subtle)`,
+  and `focus-visible:ring-(--color-ring)` (×2). All become the plain
+  `bg-polara-accent` / `hover:bg-polara-accent-hover` /
+  `focus:bg-polara-accent-subtle` / `focus-visible:ring-polara-ring` utilities.
+  Its `index.css` also carries a workaround comment about the collision that can
+  be deleted on upgrade.
+
+Find them with:
+
+```bash
+grep -rn -- '--color-accent\|--color-ring' src/
+```
+
+Note that these fail silently too: an un-migrated `bg-(--color-accent)` resolves
+to an undefined custom property, so the element simply has no background.
 
 ## Deliberately NOT in this package
 
