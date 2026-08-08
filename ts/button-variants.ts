@@ -15,7 +15,7 @@ export const buttonVariants = cva(
           "border border-polara-gray-200 text-polara-gray-700 hover:bg-polara-gray-50 " +
           "disabled:bg-polara-gray-50 disabled:border-polara-gray-100 disabled:text-polara-gray-400",
         ghost:
-          "text-polara-blue underline underline-offset-2 hover:text-polara-blue-600 " +
+          "text-polara-blue underline underline-offset-2 hover:text-polara-deepblue " +
           "disabled:text-polara-gray-400 disabled:no-underline",
         destructive:
           "bg-polara-danger text-white hover:bg-polara-danger-text " +
