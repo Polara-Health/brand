@@ -69,5 +69,8 @@
   src: url("../fonts/inter-var-latin.woff2") format("woff2");
   font-weight: 100 900;
   font-display: swap;
-  unicode-range: U+0000-00FF, U+2013-2014, U+2018-201D;
+  /* Basic latin + the punctuation our product copy actually uses: en/em dash,
+   * curly quotes, ellipsis, bullet. Omitting U+2026 left every "Loading…" in
+   * the fallback face mid-sentence. */
+  unicode-range: U+0000-00FF, U+2013-2014, U+2018-201D, U+2022, U+2026;
 }
