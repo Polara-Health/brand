@@ -1,0 +1,35 @@
+{
+  "name": "@polara-health/brand",
+  "version": "1.0.0",
+  "description": "Polara Health brand package — design tokens, theme layers, shared component variants, fonts, and logo assets. One source of truth for the product family.",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Polara-Health/brand.git"
+  },
+  "files": [
+    "css",
+    "ts",
+    "fonts",
+    "assets",
+    "BRAND-GUIDE.md"
+  ],
+  "exports": {
+    "./css/core.css": "./css/core.css",
+    "./css/theme-myhealth.css": "./css/theme-myhealth.css",
+    "./css/theme-vitalsign.css": "./css/theme-vitalsign.css",
+    "./button-variants": "./ts/button-variants.ts",
+    "./status-badges": "./ts/status-badges.ts",
+    "./fonts/*": "./fonts/*",
+    "./assets/*": "./assets/*"
+  },
+  "peerDependencies": {
+    "class-variance-authority": ">=0.7",
+    "tailwindcss": ">=4"
+  },
+  "peerDependenciesMeta": {
+    "class-variance-authority": {
+      "optional": true
+    }
+  }
+}

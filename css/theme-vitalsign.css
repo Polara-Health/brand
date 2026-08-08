@@ -1,0 +1,14 @@
+/* VitalSign eSignature — theme layer over family/polara-core.css
+ * Keeps the shipped clinical blue, tuned to sit next to polara-blue without
+ * being it (guide §2.4). Light mode only — a signed document must look
+ * identical to every party. Slate remains inside shadcn primitives only;
+ * every visible neutral is a Polara gray.
+ */
+@theme {
+  --color-accent:        #206ea6; /* oklch(0.52 0.115 245) · 5.5:1 */
+  --color-accent-hover:  #1a5c8c; /* oklch(0.44 0.115 245) · 7.1:1 */
+  --color-accent-subtle: #eaf2f8;
+  --color-ring:          #206ea6;
+
+  --font-signature: "Segoe Script", "Bradley Hand", "Snell Roundhand", "Apple Chancery", "Brush Script MT", cursive;
+}
