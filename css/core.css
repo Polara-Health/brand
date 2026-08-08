@@ -7,6 +7,7 @@
   /* Brand hues — constant across the family */
   --color-polara-deepblue:  #1b365d; /* 12.1:1 on white */
   --color-polara-blue:      #005b96; /* headings, links, rules · 7.2:1 */
+  --color-polara-blue-600:  #004a7a; /* pressed / darker link (= myhealth accent-hover) · 9.3:1 */
   --color-polara-lightblue: #0099d8; /* hover/focus/decorative ONLY — 3.2:1, never text on white */
   --color-polara-rose:      #87364e; /* signature accent, sparing · 7.9:1 */
   --color-polara-yellow:    #ffd700; /* ONLY on deepblue (8.6:1) — 1.4:1 on white */
