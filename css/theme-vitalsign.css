@@ -5,10 +5,10 @@
  * every visible neutral is a Polara gray.
  */
 @theme {
-  --color-accent:        #206ea6; /* oklch(0.52 0.115 245) · 5.5:1 */
-  --color-accent-hover:  #1a5c8c; /* oklch(0.44 0.115 245) · 7.1:1 */
-  --color-accent-subtle: #eaf2f8;
-  --color-ring:          #206ea6;
+  --color-polara-accent:        #206ea6; /* oklch(0.52 0.115 245) · 5.5:1 */
+  --color-polara-accent-hover:  #1a5c8c; /* oklch(0.44 0.115 245) · 7.1:1 */
+  --color-polara-accent-subtle: #eaf2f8;
+  --color-polara-ring:          #206ea6;
 
   --font-signature: "Segoe Script", "Bradley Hand", "Snell Roundhand", "Apple Chancery", "Brush Script MT", cursive;
 }
