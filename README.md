@@ -18,7 +18,7 @@ Or publish to GitHub Packages under the `@polara-health` scope.
 /* packages/client/src/index.css */
 @import "tailwindcss";
 @import "@polara-health/brand/css/core.css";
-@import "@polara-health/brand/css/theme-myhealth.css"; /* or theme-vitalsign.css */
+@import "@polara-health/brand/css/theme-myhealth.css"; /* or theme-vitalsign.css / theme-wellkept.css */
 
 /* REQUIRED — see "The @source line is not optional" below. */
 @source "../../../node_modules/@polara-health/brand/ts";
