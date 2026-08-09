@@ -1,0 +1,11 @@
+/* wellKept password vault — theme layer over css/core.css.
+ * Deep teal: adjacent to the family blues without being one of them; reads
+ * calm/secure next to vitalSign's clinical blue. Values from the wellKept
+ * kickoff design handoff (ADR-002, four-slot contract).
+ */
+@theme {
+  --color-polara-accent:        #1a6b75; /* deep teal · 6.2:1 on white */
+  --color-polara-accent-hover:  #14545c; /* one oklch step down · 8.6:1 */
+  --color-polara-accent-subtle: #e8f2f3; /* accent at ~6% over white */
+  --color-polara-ring:          #1a6b75; /* focus ring · >3:1 on white */
+}
