@@ -316,6 +316,61 @@ reverse lockup on the accent. The wordmark's white passes everywhere the endorse
 reads **VitalSign** (§1). Logo stylisation is not prose. Both are correct as they stand; do not
 "fix" either into the other.
 
+### 7.3 In-app logo: inline SVG + live text — no packaged component, deliberately
+
+vitalSign renders its logo as an inline SVG React component
+(`packages/{client,admin}/src/components/brand/VitalSignLogo.tsx`, currently duplicated per app).
+The obvious tidy-up — exporting that component from this package — is **deliberately rejected**:
+this package ships CSS, cva variants, fonts, and static assets, with `class-variance-authority` as
+its only (optional) peer. A `.tsx` export would take a React peer dependency for the whole product
+family and lock every consumer to one JSX runtime, for one logo.
+
+What is canonical is the **pattern**, not a component: in any header-sized surface, composite the
+mark with live text rather than `<img src=".../vitalsign-lockup-full-color.svg">`, because
+
+- **the surface renders its identity even if a static asset request fails** — this matters most on
+  vitalSign's signing ceremony, which is a legal instrument;
+- **`currentColor` on the tile lets the mark follow the app's theme accent** — one source of truth
+  (`--color-polara-accent`) instead of a hex frozen in an asset file;
+- **it survives header sizes** — live text at `0.625rem` stays legible where the packaged lockup's
+  endorsement scales to ~6 px (§7.2 minimum sizes).
+
+Reference implementation, adapted from vitalSign dev (its original uses the app-local `cn()`
+helper and `text-primary`; shown here with the family-canonical slot utilities — remember the
+[`@source` requirement](README.md) applies to your own source too if these classes appear
+nowhere else). Geometry, casing, and letter-spacing match the packaged art exactly:
+
+```tsx
+/** The ECG trace on the rounded accent tile. Decorative — the lockup names it. */
+export function VitalSignMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 96 96" className={className} aria-hidden="true" focusable="false">
+      <rect width="96" height="96" rx="24" fill="currentColor" />
+      <path
+        d="M10 60 H28 L42 24 L58 84 L70 48 L76 60 H86"
+        fill="none" stroke="#fff" strokeWidth="9"
+        strokeLinecap="round" strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Mark + wordmark + endorsement as one readable unit. */
+export function VitalSignLockup({ className }: { className?: string }) {
+  return (
+    <span className={`inline-flex items-center gap-2.5 ${className ?? ""}`}>
+      <VitalSignMark className="size-9 shrink-0 text-polara-accent" />
+      <span className="flex flex-col leading-none">
+        <span className="text-xl font-semibold tracking-[-0.03em] text-polara-accent">vitalSign</span>
+        <span className="mt-1 text-[0.625rem] font-medium tracking-[0.12em] text-polara-gray-600 uppercase">
+          by Polara Health
+        </span>
+      </span>
+    </span>
+  );
+}
+```
+
 ---
 
 ## 8. Known inconsistencies

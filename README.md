@@ -129,6 +129,10 @@ to an undefined custom property, so the element simply has no background.
 
 ## Deliberately NOT in this package
 
+- A React logo component — vitalSign inlines its mark per app (BRAND-GUIDE.md
+  §7.3 documents the canonical pattern). Exporting a `.tsx` would take a React
+  peer dependency for the whole family and pin a JSX runtime, for one logo. The
+  package ships the SVGs; each app owns its ~40-line inline component.
 - shadcn/ui components — each app vendors its own; slate stays internal to them
 - Email templates — their grays are Tailwind v3 defaults, load-bearing for
   Outlook/Gmail rendering; never merge with the web palette
