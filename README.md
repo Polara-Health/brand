@@ -7,7 +7,7 @@ theme layers, shared component variants, the Inter font, and logo assets.
 
 ```jsonc
 // package.json — pinned by tag; no registry needed
-"@polara-health/brand": "github:Polara-Health/brand#v2.0.0"
+"@polara-health/brand": "github:Polara-Health/brand#v2.2.0"
 ```
 
 Or publish to GitHub Packages under the `@polara-health` scope.

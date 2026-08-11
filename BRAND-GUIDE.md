@@ -447,5 +447,5 @@ designer doesn't "correct" one into another by accident.
 `directHealthPortal/packages/client/public/assets/` · this package's `css/`, `fonts/`, `assets/` ·
 `vitalSign/packages/client/src/components/brand/VitalSignLogo.tsx` (dev, PR #58)
 
-**Generated:** 2026-08-08 · **Updated:** 2026-08-10 (v2.2.0 — product asset landing) ·
+**Generated:** 2026-08-08 · **Updated:** 2026-08-11 (v2.2.0 — product asset landing) ·
 **Maintainer:** Polara Health
