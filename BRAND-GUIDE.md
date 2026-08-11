@@ -371,6 +371,36 @@ export function VitalSignLockup({ className }: { className?: string }) {
 }
 ```
 
+### 7.4 Favicon delivery — copy into `public/`, always
+
+`index.html` cannot reference `node_modules`, so favicons must be copied into each app's own
+`public/` — there is no import that avoids it. Vendor them with a sync script, mirroring
+marketing's `fonts:sync` (adjust the `../..` to reach the workspace `node_modules` from your
+package directory, exactly as with the `@source` line; spell all three paths out — `{a,b}` brace
+expansion is not POSIX sh):
+
+```jsonc
+// packages/<app>/package.json
+"favicons:sync": "cp ../../node_modules/@polara-health/brand/assets/vitalsign/vitalsign-favicon.svg ../../node_modules/@polara-health/brand/assets/vitalsign/vitalsign-favicon-16.png ../../node_modules/@polara-health/brand/assets/vitalsign/vitalsign-favicon-32.png public/"
+```
+
+Wire them in `index.html` with `%BASE_URL%`, never a root-relative `/`:
+
+```html
+<link rel="icon" type="image/svg+xml" href="%BASE_URL%vitalsign-favicon.svg" />
+<link rel="alternate icon" type="image/png" sizes="32x32" href="%BASE_URL%vitalsign-favicon-32.png" />
+<link rel="alternate icon" type="image/png" sizes="16x16" href="%BASE_URL%vitalsign-favicon-16.png" />
+```
+
+The placeholder is load-bearing under a Vite `base`: vitalSign's admin SPA builds with
+`base: "/admin/"`, so a bare `/vitalsign-favicon.svg` would resolve outside its Front Door route.
+This bit downstream once already (vitalSign PR #58); verify the emitted URLs after a build rather
+than assuming:
+
+```bash
+grep -o 'href="[^"]*favicon[^"]*"' dist/index.html   # every URL must carry the base prefix
+```
+
 ---
 
 ## 8. Known inconsistencies

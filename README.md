@@ -51,6 +51,25 @@ If you cannot add an `@source` (no control over the entry CSS), the fallback is
 to restate the affected utilities in your own app CSS so the scanner sees them
 as literal strings — uglier, and it drifts.
 
+## Assets fail the same way `@source` does
+
+The `@source` trap has an asset-shaped sibling: a subpath that resolves on
+your machine can still fail in a container build — a stale lockfile, a tag
+whose `files` list dropped a directory, a hand-written `node_modules/…` path
+that hoisting moved. Every asset lands through the `./assets/*` export, so
+verify resolution the way the `@source` section verifies the emitted CSS:
+
+```bash
+# from the consuming app — exercises the exports map and the packed file list;
+# a broken subpath fails loudly here instead of in someone else's build
+node -e "console.log(require.resolve('@polara-health/brand/assets/vitalsign/vitalsign-favicon.svg'))"
+```
+
+Favicons additionally have to be **copied** into each app's `public/` —
+`index.html` cannot reference `node_modules`. The copy step and the Vite
+`%BASE_URL%` wrinkle that bit vitalSign's admin SPA (built under
+`base: "/admin/"`) are documented in BRAND-GUIDE.md §7.4.
+
 ## The theme contract
 
 Core owns neutrals, type, radius, semantic pairs, component variants. An app's
