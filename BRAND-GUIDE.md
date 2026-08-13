@@ -6,7 +6,7 @@ prompts as the authoritative style source.
 
 Extracted from the live code on 2026-08-08 — every value below is what actually ships, not an
 aspiration. Where the code disagrees with itself, the conflict is flagged in
-[Known inconsistencies](#known-inconsistencies) rather than silently resolved.
+[Known inconsistencies](#8-known-inconsistencies) rather than silently resolved.
 
 ---
 
@@ -25,6 +25,8 @@ aspiration. Where the code disagrees with itself, the conflict is flagged in
 - **myHealth Experience Portal** (a.k.a. myHealth Portal) — the patient portal. Login button reads
   "myHealth Login".
 - **VitalSign** — the eSignature service. Product line: *"The signature that's good for your health."*
+  In logo art the wordmark is stylised **vitalSign** — deliberate, not a typo; see the casing rule
+  in [§7.2](#72-vitalsign--assetsvitalsign).
 
 **Wordmark lockup.** "Polara" in near-black, " Health" in rose. Used as live text in email; as an
 image everywhere else.
@@ -148,10 +150,15 @@ assume a shadcn `<Button>` is on-brand out of the box.
 - **Signature capture (VitalSign):** `--font-signature: "Segoe Script", "Bradley Hand", "Snell
   Roundhand", "Apple Chancery", "Brush Script MT", cursive` — the typed-signature preview only.
 
-> ⚠️ **Inter is never loaded.** There is no `@font-face`, no Google Fonts import, and no `<link>` in
-> any `index.html`. Inter renders only for users who happen to have it installed locally; everyone
-> else silently gets `system-ui`. Any new work should self-host Inter (variable woff2, `latin`
-> subset, `font-display: swap`) or drop it and commit to the system stack.
+**Inter is self-hosted by this package.** `fonts/inter-var-latin.woff2` ships with an `@font-face`
+in `css/core.css` (`font-weight: 100 900`, `font-display: swap`, latin + product punctuation
+range) — present in every tag since v1.0.1. Importing `core.css` is loading Inter: vitalSign
+(client + admin, pinned `#v2.0.0`) and wellKept (client, `#v1.0.1`) both do.
+
+> ⚠️ **directHealthPortal still never loads Inter.** It does not consume this package; it names
+> Inter in its own `--font-sans` with no `@font-face` behind it, so its users silently get
+> `system-ui` unless Inter happens to be installed locally. Fixed by adopting the package (its
+> planned migration — see the README's v1→v2 notes) or by self-hosting the same woff2.
 
 **Scale in use**
 
@@ -242,20 +249,157 @@ email, but don't import them into the web palette.
 
 ## 7. Logo assets
 
-Located in `directHealthPortal/packages/client/public/assets/`.
+Shipped in this package under `assets/<product>/` — one directory per product, plus `polara/` for
+the corporate marks. Import path from any bundler that reads the `exports` map:
+`@polara-health/brand/assets/<product>/<file>`. The `./assets/*` wildcard covers nested paths
+(confirmed against a scratch consumer, not assumed). A product with no delivered identity gets no
+directory — do not invent assets.
 
-| File | Size | Status |
-|---|---|---|
-| `logo-full-color-rgb.svg` | 49 KB | **Vector master.** `viewBox="0 0 637.7198 235.0486"`. Currently referenced by no code — this is the file to use for anything new. |
-| `DirectHealth_Full_Logo2.png` | 185 KB | The in-app logo today: header, login, register, patient setup |
-| `polara-health-logo.png` | 445 KB | Printed statement letterhead only, `h-20` |
-| `logo-reverse-rgbv2.png` | 22 KB | Knockout / reverse variant for dark grounds. Unreferenced. |
-| `favicon.ico` | 949 KB | Oversized; should be regenerated |
+### 7.1 Polara (corporate) — `assets/polara/`
 
-**Alt text** is always `Polara Health Logo`, or on the statement letterhead
+| File | Format | Use | Alt text |
+|---|---|---|---|
+| `logo-full-color-rgb.svg` | SVG, `viewBox="0 0 637.7198 235.0486"`, 49 KB | **Vector master.** The file for anything new. | `Polara Health Logo` |
+| `logo-reverse-rgbv2.png` | PNG, 22 KB | Knockout / reverse for dark grounds | `Polara Health Logo` |
+
+On the printed statement letterhead the alt text is
 `Polara Health — Guiding Your Way to Wellness Since 1966`.
 
-**Vector logo colors:** `#781732` (dominant, 43 fills) and `#37323a` (dark neutral, 6 fills).
+**Vector master colors:** `#781732` (dominant, 43 fills) and `#37323a` (dark neutral, 6 fills) —
+neither is a CSS token; see [Known inconsistencies](#8-known-inconsistencies) 1–2 before "fixing"
+either.
+
+directHealthPortal still carries its own pre-package copies in
+`packages/client/public/assets/`: `DirectHealth_Full_Logo2.png` (185 KB — its in-app logo today)
+and `polara-health-logo.png` (445 KB — printed letterhead, `h-20`); plus a 949 KB `favicon.ico`
+one level up in `public/` that should be regenerated. Treat those as historical; the package files
+are canonical for new work.
+
+### 7.2 VitalSign — `assets/vitalsign/`
+
+| File | Format | Use | Alt text |
+|---|---|---|---|
+| `vitalsign-icon.svg` | SVG 96×96, tile `rx 24`, ECG stroke w9 | App icon, splash, any large square context | `VitalSign` — or `aria-hidden="true"` when the product name is adjacent |
+| `vitalsign-favicon.svg` | SVG 48×48, tile `rx 10`, stroke w5.5 | Favicon for SVG-capable browsers | — |
+| `vitalsign-favicon-16.png` / `-32.png` | PNG 16×16 / 32×32 | Raster favicon fallbacks | — |
+| `vitalsign-lockup-full-color.svg` | SVG 252×76 | **Large-format only** (≥ 64 px tall — see minimum sizes): hero, marketing, print, splash | `VitalSign by Polara Health` |
+| `vitalsign-lockup-reverse.svg` | SVG 252×76 | Same, on dark grounds only (minimum ground below). Currently unused — both product apps are light-only. | `VitalSign by Polara Health` |
+
+**Token provenance.** The mark's `#206ea6` (tile, ECG stroke, wordmark) **is**
+`--color-polara-accent` exactly as `css/theme-vitalsign.css` ships it. They match today; this
+sentence is what keeps them matching — a change to either is a change to both. The full-colour
+endorsement is `polara-gray-600` `#57626d` (6.2:1 on white — snapped from the delivered `#55606c`
+in v2.2.0; both pass AA, but an off-token hex in master art is how palettes fork). The reverse
+endorsement `#9fb3cd` is a **deliberate off-token tint** — the palette has no light blue-gray — kept
+as delivered.
+
+**Minimum sizes — measured, not guessed.** The endorsement line is 11.5 px on the 76 px artboard,
+so it renders at ~15% of lockup height. Rendered and inspected at 1×:
+
+| Lockup height | Endorsement | Verdict |
+|---|---|---|
+| 40 px (`h-10`, the §5 header spec) | ≈ 6.1 px | Illegible smudge — never |
+| 56 px | ≈ 8.5 px | Marginal |
+| **64 px** | ≈ 9.7 px | **Minimum height for the full lockup** |
+| 96 px | ≈ 14.5 px | Comfortable |
+
+The packaged lockups are therefore **large-format assets only**. In a §5-spec header the canonical
+treatment is the inline mark + live text pattern (§7.3), not this file. The mark alone survives
+down to 16 px — that is the favicon.
+
+**Minimum ground for the reverse lockup.** The endorsement `#9fb3cd` needs a ground of relative
+luminance ≤ 0.058 to clear AA (4.5:1). `polara-deepblue` `#1b365d` (5.7:1) and `polara-gray-900`
+`#262c33` (6.6:1) qualify; **the VitalSign accent `#206ea6` does not** (2.6:1) — never place the
+reverse lockup on the accent. The wordmark's white passes everywhere the endorsement does.
+
+**Wordmark casing — a rule, not an inconsistency.** The logo art reads **vitalSign**; running text
+reads **VitalSign** (§1). Logo stylisation is not prose. Both are correct as they stand; do not
+"fix" either into the other.
+
+### 7.3 In-app logo: inline SVG + live text — no packaged component, deliberately
+
+vitalSign renders its logo as an inline SVG React component
+(`packages/{client,admin}/src/components/brand/VitalSignLogo.tsx`, currently duplicated per app).
+The obvious tidy-up — exporting that component from this package — is **deliberately rejected**:
+this package ships CSS, cva variants, fonts, and static assets, with `class-variance-authority` as
+its only (optional) peer. A `.tsx` export would take a React peer dependency for the whole product
+family and lock every consumer to one JSX runtime, for one logo.
+
+What is canonical is the **pattern**, not a component: in any header-sized surface, composite the
+mark with live text rather than `<img src=".../vitalsign-lockup-full-color.svg">`, because
+
+- **the surface renders its identity even if a static asset request fails** — this matters most on
+  vitalSign's signing ceremony, which is a legal instrument;
+- **`currentColor` on the tile lets the mark follow the app's theme accent** — one source of truth
+  (`--color-polara-accent`) instead of a hex frozen in an asset file;
+- **it survives header sizes** — live text at `0.625rem` stays legible where the packaged lockup's
+  endorsement scales to ~6 px (§7.2 minimum sizes).
+
+Reference implementation, adapted from vitalSign dev (its original uses the app-local `cn()`
+helper and `text-primary`; shown here with the family-canonical slot utilities — remember the
+[`@source` requirement](README.md) applies to your own source too if these classes appear
+nowhere else). Geometry, casing, and letter-spacing match the packaged art exactly:
+
+```tsx
+/** The ECG trace on the rounded accent tile. Decorative — the lockup names it. */
+export function VitalSignMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 96 96" className={className} aria-hidden="true" focusable="false">
+      <rect width="96" height="96" rx="24" fill="currentColor" />
+      <path
+        d="M10 60 H28 L42 24 L58 84 L70 48 L76 60 H86"
+        fill="none" stroke="#fff" strokeWidth="9"
+        strokeLinecap="round" strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Mark + wordmark + endorsement as one readable unit. */
+export function VitalSignLockup({ className }: { className?: string }) {
+  return (
+    <span className={`inline-flex items-center gap-2.5 ${className ?? ""}`}>
+      <VitalSignMark className="size-9 shrink-0 text-polara-accent" />
+      <span className="flex flex-col leading-none">
+        <span className="text-xl font-semibold tracking-[-0.03em] text-polara-accent">vitalSign</span>
+        <span className="mt-1 text-[0.625rem] font-medium tracking-[0.12em] text-polara-gray-600 uppercase">
+          by Polara Health
+        </span>
+      </span>
+    </span>
+  );
+}
+```
+
+### 7.4 Favicon delivery — copy into `public/`, always
+
+`index.html` cannot reference `node_modules`, so favicons must be copied into each app's own
+`public/` — there is no import that avoids it. Vendor them with a sync script, mirroring
+marketing's `fonts:sync` (adjust the `../..` to reach the workspace `node_modules` from your
+package directory, exactly as with the `@source` line; spell all three paths out — `{a,b}` brace
+expansion is not POSIX sh):
+
+```jsonc
+// packages/<app>/package.json
+"favicons:sync": "cp ../../node_modules/@polara-health/brand/assets/vitalsign/vitalsign-favicon.svg ../../node_modules/@polara-health/brand/assets/vitalsign/vitalsign-favicon-16.png ../../node_modules/@polara-health/brand/assets/vitalsign/vitalsign-favicon-32.png public/"
+```
+
+Wire them in `index.html` with `%BASE_URL%`, never a root-relative `/`:
+
+```html
+<link rel="icon" type="image/svg+xml" href="%BASE_URL%vitalsign-favicon.svg" />
+<link rel="alternate icon" type="image/png" sizes="32x32" href="%BASE_URL%vitalsign-favicon-32.png" />
+<link rel="alternate icon" type="image/png" sizes="16x16" href="%BASE_URL%vitalsign-favicon-16.png" />
+```
+
+The placeholder is load-bearing under a Vite `base`: vitalSign's admin SPA builds with
+`base: "/admin/"`, so a bare `/vitalsign-favicon.svg` would resolve outside its Front Door route.
+This bit downstream once already (vitalSign PR #58); verify the emitted URLs after a build rather
+than assuming:
+
+```bash
+grep -o 'href="[^"]*favicon[^"]*"' dist/index.html   # every URL must carry the base prefix
+```
 
 ---
 
@@ -270,7 +414,8 @@ designer doesn't "correct" one into another by accident.
    is a third, though it reads as blue rather than near-black.
 3. **Undefined gray steps** — `polara-gray-300/400/500/600/900` used across 10 files, defined
    nowhere. §2.2 proposes values.
-4. **Inter never loaded** (§3).
+4. **Inter not loaded in directHealthPortal** — this package's `core.css` `@font-face` fixes it
+   for consumers (§3), but dHP does not consume the package yet.
 5. **shadcn slate vs. Polara palette** are disconnected (§2.5).
 6. **`polara-lightblue` used as body text** in 26 places at 3.2:1 — an accessibility defect.
 7. **Tagline arithmetic.** "Since 1966" vs. "For over 55 years" — as of 2026 that's ~60 years.
@@ -299,6 +444,8 @@ designer doesn't "correct" one into another by accident.
 `directHealthPortal/packages/client/src/pages/Root.tsx` ·
 `directHealthPortal/packages/server/utils/send/emailTemplate.ts` ·
 `vitalSign/packages/client/src/index.css` · `vitalSign/packages/server/utils/brandedEmail.ts` ·
-`directHealthPortal/packages/client/public/assets/`
+`directHealthPortal/packages/client/public/assets/` · this package's `css/`, `fonts/`, `assets/` ·
+`vitalSign/packages/client/src/components/brand/VitalSignLogo.tsx` (dev, PR #58)
 
-**Generated:** 2026-08-08 · **Maintainer:** Polara Health
+**Generated:** 2026-08-08 · **Updated:** 2026-08-11 (v2.2.0 — product asset landing) ·
+**Maintainer:** Polara Health

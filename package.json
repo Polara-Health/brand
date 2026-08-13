@@ -1,6 +1,6 @@
 {
   "name": "@polara-health/brand",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Polara Health brand package \u2014 design tokens, theme layers, shared component variants, fonts, and logo assets. One source of truth for the product family.",
   "license": "UNLICENSED",
   "repository": {
